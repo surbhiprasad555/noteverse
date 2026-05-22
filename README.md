@@ -1,65 +1,132 @@
 # 🌌 Noteverse
 
-Welcome to **Noteverse**, a beautifully crafted, dreamy night-themed note-taking web application. Built with a stunning glassmorphism UI, paper-cut landscapes, and smooth interactive animations, it serves as a magical canvas for your memories and thoughts.
+> *A place where your memories and thoughts feel at home.*
 
-## ✨ Features
-*   **Dreamy UI**: Beautiful night landscape background built with SVG paper-cut styling and CSS animations.
-*   **Glassmorphism Cards**: Premium frosted-glass styling for all UI components.
-*   **Typewriter Welcome**: A sleek typewriter effect greets you upon arrival.
-*   **Interactive Splash Cursor**: Fluid, colorful cursor trails.
-*   **Motivational Quotes**: A rotating centerpiece of inspiring quotes from world leaders.
-*   **Fully Functional Notes**:
-    *   Add rich text notes and to-do lists.
-    *   Pin important notes.
-    *   Archive notes you want to save for later.
-    *   Smooth carousel navigation.
-
-## 🚀 Getting Started Locally
-Since Noteverse is a purely static front-end application (HTML/CSS/JS), getting started is incredibly easy!
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/surbhiprasad555/noteverse.git
-   ```
-2. Open `index.html` directly in your web browser. 
-   *(Alternatively, you can run a local server like `npx serve -l 3000` to serve the files).*
+Noteverse is a beautifully crafted, dreamy night-themed note-taking web application. Built with pure HTML, CSS, and JavaScript — no frameworks, no installs, just open and use.
 
 ---
 
-## ☁️ Deployment Instructions (AWS & Azure)
-Because Noteverse consists solely of static files (`index.html` and `splashCursor.js`), **no code changes or build steps are required** for deployment! You can seamlessly deploy this to any static hosting provider.
+## ✨ What it looks like
 
-### Option 1: Deploying to AWS (Amazon S3)
-The easiest way to host a static site on AWS is via S3.
-1. Log in to the AWS Console and navigate to **S3**.
-2. Click **Create bucket**. Name it (e.g., `noteverse-app`), untick "Block all public access", and acknowledge the warning.
-3. Once created, click on your bucket, go to the **Properties** tab, scroll to the bottom, and click **Edit** under **Static website hosting**. Select **Enable** and type `index.html` as the Index document.
-4. Go to the **Permissions** tab, edit the **Bucket policy**, and add a public read policy (replace `YOUR_BUCKET_NAME` with your actual bucket name):
-   ```json
-   {
-       "Version": "2012-10-17",
-       "Statement": [
-           {
-               "Sid": "PublicReadGetObject",
-               "Effect": "Allow",
-               "Principal": "*",
-               "Action": "s3:GetObject",
-               "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/*"
-           }
-       ]
-   }
-   ```
-5. Go to the **Objects** tab and upload `index.html` and `splashCursor.js`. 
-6. Your site is live! You can find the URL in the *Properties* tab under *Static website hosting*. *(Optional: Hook it up to Amazon CloudFront for a custom domain and HTTPS).*
+A stunning paper-cut night landscape with a glowing crescent moon, twinkling stars, and layered purple wave hills as your backdrop — while you write, organise, and cherish your thoughts in glassmorphism cards.
 
-### Option 2: Deploying to Microsoft Azure (Azure Static Web Apps)
-Azure Static Web Apps is perfect for this project and offers a free tier.
-1. Ensure your latest code is pushed to GitHub.
-2. Log in to the Azure Portal and search for **Static Web Apps**.
-3. Click **Create**.
-4. Fill out the details (Subscription, Resource Group, Name) and select the **Free** plan.
-5. Under **Deployment details**, choose **GitHub** and authorize your account.
-6. Select your organization, the `noteverse` repository, and the `main` branch.
-7. Under **Build Details**, choose **Custom**. Leave the `App location` as `/` (root directory), and clear out the `Api location` and `Output location` (leave them completely blank, since there is no build step).
-8. Click **Review + Create**, then **Create**. 
-9. Azure will automatically create a GitHub Actions workflow in your repository and deploy the site. You'll get a generated URL once it finishes!
+---
+
+## 🚀 Features
+
+### 📝 Notes
+- **Create notes** with a title, message, and an optional image
+- **Edit notes** anytime — changes are saved instantly
+- **Pin** important notes to keep them at the top
+- **Archive** notes you are done with (and restore them anytime)
+- **Color-tag** notes in 5 tones: Purple, Blue, Teal, Rose, Amber
+- **Image upload** — attach a photo to any note (stored locally, works offline)
+
+### 🔍 Search & Organisation
+- **Live search** — filter notes instantly as you type
+- **Categories** — All Notes, Pinned, Archive, To-Do Lists, Ideas
+- **Timestamps** — see when each note was created or last updated
+- **Word count** — shown live while you write
+
+### 💾 Always Saved
+- All your notes are **automatically saved** to your browser's local storage
+- Survive page refresh, browser restart, and coming back days later
+- Your **day / night theme preference** is also remembered
+
+### ⌨️ Keyboard Shortcuts
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl + S` | Save the current note |
+| `Ctrl + F` | Focus the search bar |
+| `Escape` | Close any open panel |
+
+### 🎨 Design
+- Dreamy night / sunny day theme toggle
+- Glassmorphism UI with smooth animations
+- Paper-cut layered landscape background
+- Rotating motivational quotes from great minds
+- Typewriter welcome greeting
+- Interactive fluid cursor effect
+- Fully responsive — works on mobile, tablet, and desktop
+
+---
+
+## 📁 Project Structure
+
+```
+noteverse/
+├── index.html                  ← Main app (single page)
+├── css/
+│   └── styles.css              ← All custom styles
+├── js/
+│   ├── app.js                  ← All app logic
+│   └── splashCursor.js         ← Fluid cursor animation
+├── assets/                     ← Static assets (images, icons)
+├── staticwebapp.config.json    ← Hosting configuration
+├── robots.txt                  ← Search engine instructions
+└── README.md
+```
+
+---
+
+## 🖥️ Running Locally
+
+No build tools or installs needed.
+
+**Option 1 — Just open it:**
+```
+Double-click index.html in your file explorer
+```
+
+**Option 2 — With a local server (recommended):**
+```bash
+npx serve -l 3000
+```
+Then open [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 💡 Quotes in the App
+
+Noteverse rotates through these inspiring quotes every 10 seconds:
+
+- *"If you want to shine like a sun, first burn like a sun."* — Dr. A.P.J. Abdul Kalam
+- *"Be the change that you wish to see in the world."* — Mahatma Gandhi
+- *"You can't cross the sea merely by standing and staring at the water."* — Rabindranath Tagore
+- *"Arise, awake and stop not till the goal is reached."* — Swami Vivekananda
+- *"I don't believe in taking right decisions. I take decisions and then make them right."* — Ratan Tata
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Structure | HTML5 (semantic) |
+| Styling | Vanilla CSS + Tailwind CSS (CDN) |
+| Logic | Vanilla JavaScript (ES6+) |
+| Fonts | Google Fonts — Caveat |
+| Storage | Browser localStorage |
+| Animations | CSS keyframes + JS |
+
+---
+
+## 📌 Notes on Image Storage
+
+Images attached to notes are converted to Base64 and saved inside localStorage alongside the note text. This means:
+- ✅ Images work completely **offline**
+- ✅ No server or backend needed
+- ⚠️ Very large images may hit the browser's ~5MB storage limit — a warning toast will appear if this happens
+
+---
+
+## 🤝 Contributing
+
+Feel free to fork this project, suggest improvements, or open a pull request. All feedback is welcome!
+
+---
+
+<div align="center">
+  <p>Made with 💜 and a little bit of stardust</p>
+  <p><strong>Noteverse</strong> — hold your memories, one note at a time.</p>
+</div>
