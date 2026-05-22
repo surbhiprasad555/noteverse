@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Papercut Theme</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Night Theme Variables (Default) */
+            --bg-top: #12182b;
+            --bg-bottom: #1a2a5c;
+            --cloud-1: #222639;
+            --cloud-2: #2b304c;
+            --cloud-3: #4b3673;
+            --cloud-4: #734f9a;
+            --cloud-5: #9a6bbd;
+            --cloud-6: #b388d4;
+            --forest: #191c2b;
+            --moon-sun-shadow: rgba(200, 220, 255, 0.4);
+        }
+
+        body.day-theme {
+            /* Day Theme Variables */
+            --bg-top: #87CEEB; /* Sky blue */
+            --bg-bottom: #E6E6FA; /* Pastel lavender */
+            --cloud-1: #ffffff; /* White fluffy clouds */
+            --cloud-2: #f1f5f9;
+            --cloud-3: #e0f2fe; /* Soft cyan clouds/hills */
+            --cloud-4: #c7d2fe; /* Light purple */
+            --cloud-5: #a78bfa; /* Lavender */
+            --cloud-6: #8b5cf6; /* Deeper purple */
+            --forest: #2d3748; /* Dark slate forest */
+            --moon-sun-shadow: rgba(253, 184, 19, 0.6);
+        }
+
+        body {
+            background-color: #0d1128;
+            color: #ffffff;
+            font-family: 'Caveat', cursive;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .sidebar-text {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            color: white;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+            transition: color 0.8s, text-shadow 0.8s;
+        }
+        
+        body.day-theme .sidebar-text {
+            color: #2d3748;
+            text-shadow: 1px 1px 4px rgba(255,255,255,0.6);
+        }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-card {
+            animation: slideUpFade 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            width: 220px;
+            height: 320px;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s, border 0.3s;
+        }
+
+        body.day-theme .glass-card {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #2d3748;
+        }
+        
+        .hide-ui {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(139, 92, 246, 0.8); /* bright purple border like screenshot */
+        }
+        body.day-theme .glass-input {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #2d3748;
+        }
+        body.day-theme .glass-input::placeholder {
+            color: rgba(45, 55, 72, 0.6);
+        }
+
+        .paper-shadow {
+            filter: drop-shadow(0px -8px 12px rgba(0, 0, 0, 0.6)) drop-shadow(0px -4px 6px rgba(0, 0, 0, 0.4));
+        }
+        
+        .paper-shadow-top {
+            filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.6)) drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Day theme softer shadows */
+        body.day-theme .paper-shadow {
+            filter: drop-shadow(0px -8px 12px rgba(0, 0, 0, 0.2)) drop-shadow(0px -4px 6px rgba(0, 0, 0, 0.1));
+        }
+        body.day-theme .paper-shadow-top {
+            filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.2)) drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .layer {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+            transition: fill 0.8s ease-in-out;
+        }
+
+        svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        
+        .cloud-top { top: -5%; fill: var(--cloud-1); }
+        .cloud-top-2 { top: 5%; fill: var(--cloud-2); }
+        
+        .cloud-bottom-1 { bottom: 25%; z-index: 10; fill: var(--cloud-3); }
+        .cloud-bottom-2 { bottom: 15%; z-index: 20; fill: var(--cloud-4); }
+        .cloud-bottom-3 { bottom: 5%; z-index: 30; fill: var(--cloud-5); }
+        .cloud-bottom-4 { bottom: 0; z-index: 35; fill: var(--cloud-6); }
+        .forest { bottom: -2%; z-index: 40; fill: var(--forest); }
+        
+        /* Sun and Moon specific styles */
+        .celestial-body {
+            position: absolute;
+            top: 10%;
+            right: 15%;
+            width: 120px;
+            height: 120px;
+            z-index: 5;
+            transition: all 0.8s ease-in-out;
+            filter: drop-shadow(0 0 20px var(--moon-sun-shadow)) drop-shadow(-5px 5px 10px rgba(0,0,0,0.3));
+        }
+
+        .moon-shape {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.8s ease-in-out;
+            fill: #e2e8f0;
+        }
+        
+        .sun-shape {
+            opacity: 0;
+            transform: scale(0.5) translateY(50px);
+            transition: all 0.8s ease-in-out;
+            fill: #FDB813; /* Warm sunlight yellow */
+        }
+
+        body.day-theme .moon-shape {
+            opacity: 0;
+            transform: scale(0.5) translateY(-50px);
+        }
+
+        body.day-theme .sun-shape {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Stars & Birds */
+        .star {
+            position: absolute;
+            background-color: #fff;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: twinkle var(--duration) infinite ease-in-out alternate;
+            transition: opacity 0.8s ease;
+        }
+        
+        .bird {
+            position: absolute;
+            fill: #4a5568;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            transform: scale(0.5);
+        }
+
+        body.day-theme .star { opacity: 0 !important; }
+        body.day-theme .bird { opacity: 0.7; }
+
+        .star-glow { filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8)); }
+
+        @keyframes twinkle {
+            0% { opacity: 0.4; transform: scale(0.8) rotate(0deg); }
+            100% { opacity: 1; transform: scale(1.1) rotate(5deg); }
+        }
+        
+        @keyframes fly {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(100px) translateY(-20px); }
+            100% { transform: translateX(200px) translateY(0); }
+        }
+
+        /* ========================================= */
+        /* Toggle Switch CSS (From User / Uiverse.io) */
+        /* ========================================= */
+        .switch-container {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            z-index: 100;
+        }
+
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 60px;
+          height: 34px;
+        }
+
+        .switch #input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #2196f3;
+          -webkit-transition: 0.4s;
+          transition: 0.4s;
+          z-index: 0;
+          overflow: hidden;
+        }
+
+        .sun-moon {
+          position: absolute;
+          content: "";
+          height: 26px;
+          width: 26px;
+          left: 4px;
+          bottom: 4px;
+          background-color: yellow;
+          -webkit-transition: 0.4s;
+          transition: 0.4s;
+        }
+
+        #input:checked + .slider {
+          background-color: black;
+        }
+
+        #input:focus + .slider {
+          box-shadow: 0 0 1px #2196f3;
+        }
+
+        #input:checked + .slider .sun-moon {
+          -webkit-transform: translateX(26px);
+          -ms-transform: translateX(26px);
+          transform: translateX(26px);
+          background-color: white;
+          -webkit-animation: rotate-center 0.6s ease-in-out both;
+          animation: rotate-center 0.6s ease-in-out both;
+        }
+
+        .moon-dot {
+          opacity: 0;
+          transition: 0.4s;
+          fill: gray;
+        }
+
+        #input:checked + .slider .sun-moon .moon-dot {
+          opacity: 1;
+        }
+
+        .slider.round {
+          border-radius: 34px;
+        }
+
+        .slider.round .sun-moon {
+          border-radius: 50%;
+        }
+
+        #moon-dot-1 { left: 10px; top: 3px; position: absolute; width: 6px; height: 6px; z-index: 4; }
+        #moon-dot-2 { left: 2px; top: 10px; position: absolute; width: 10px; height: 10px; z-index: 4; }
+        #moon-dot-3 { left: 16px; top: 18px; position: absolute; width: 3px; height: 3px; z-index: 4; }
+
+        .cloud-light { position: absolute; fill: #eee; animation-name: cloud-move; animation-duration: 6s; animation-iteration-count: infinite; }
+        .cloud-dark { position: absolute; fill: #ccc; animation-name: cloud-move; animation-duration: 6s; animation-iteration-count: infinite; animation-delay: 1s; }
+
+        #cloud-1 { left: 30px; top: 15px; width: 40px; }
+        #cloud-2 { left: 44px; top: 10px; width: 20px; }
+        #cloud-3 { left: 18px; top: 24px; width: 30px; }
+        #cloud-4 { left: 36px; top: 18px; width: 40px; }
+        #cloud-5 { left: 48px; top: 14px; width: 20px; }
+        #cloud-6 { left: 22px; top: 26px; width: 30px; }
+
+        @keyframes cloud-move {
+          0% { transform: translateX(0px); }
+          40% { transform: translateX(4px); }
+          80% { transform: translateX(-4px); }
+          100% { transform: translateX(0px); }
+        }
+
+        .stars {
+          transform: translateY(-32px);
+          opacity: 0;
+          transition: 0.4s;
+        }
+
+        .star-switch {
+          fill: white;
+          position: absolute;
+          -webkit-transition: 0.4s;
+          transition: 0.4s;
+          animation-name: star-twinkle;
+          animation-duration: 2s;
+          animation-iteration-count: infinite;
+        }
+
+        #input:checked + .slider .stars {
+          -webkit-transform: translateY(0);
+          -ms-transform: translateY(0);
+          transform: translateY(0);
+          opacity: 1;
+        }
+
+        #star-1 { width: 20px; top: 2px; left: 3px; animation-delay: 0.3s; }
+        #star-2 { width: 6px; top: 16px; left: 3px; }
+        #star-3 { width: 12px; top: 20px; left: 10px; animation-delay: 0.6s; }
+        #star-4 { width: 18px; top: 0px; left: 18px; animation-delay: 1.3s; }
+
+        @keyframes star-twinkle {
+          0% { transform: scale(1); }
+          40% { transform: scale(1.2); }
+          80% { transform: scale(0.8); }
+          100% { transform: scale(1); }
+        }
+        
+        @keyframes rotate-center {
+            0% { transform: translateX(26px) rotate(0); }
+            100% { transform: translateX(26px) rotate(360deg); }
+        }
+
+        /* Prevent transitions on page load */
+        .preload * {
+            -webkit-transition: none !important;
+            -moz-transition: none !important;
+            -ms-transition: none !important;
+            -o-transition: none !important;
+            transition: none !important;
+        }
+
+    </style>
+</head>
+<body class="preload">
+
+    <!-- Splash Cursor Canvas (from React Bits) -->
+    <canvas id="fluid" class="fixed top-0 left-0 z-50 pointer-events-none w-screen h-screen block"></canvas>
+
+    <!-- Top Bar Typewriter -->
+    <div id="top-bar" class="fixed top-8 left-0 w-full z-[150] px-12 text-center pointer-events-none drop-shadow-xl transition-opacity duration-1000">
+        <p id="typewriter-text" class="sidebar-text text-3xl md:text-4xl text-white tracking-wide leading-relaxed drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"></p>
+    </div>
+
+    <!-- UI Overlay: Sidebar -->
+    <div id="main-sidebar" class="fixed top-24 left-8 z-[100] flex flex-col gap-6 transition-opacity duration-500">
+        <div class="flex items-center gap-4 cursor-pointer group" onclick="openCategory('All notes', this.querySelector('.icon-svg').outerHTML)">
+            <div class="w-14 h-14 rounded-full glass-btn flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
+                <svg viewBox="0 0 24 24" class="icon-svg w-8 h-8 text-black fill-current transition-transform duration-300"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" /></svg>
+            </div>
+            <span class="sidebar-text opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 pointer-events-none">All notes</span>
+        </div>
+        <div class="flex items-center gap-4 cursor-pointer group" onclick="openCategory('Pinned notes', this.querySelector('.icon-svg').outerHTML)">
+            <div class="w-14 h-14 rounded-full glass-btn flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 shadow-lg">
+                <svg viewBox="0 0 24 24" class="icon-svg w-8 h-8 text-black fill-current transition-transform duration-300"><path d="M16 12V4H17V2H7V4H8V12L6 14V16H11V22H13V16H18V14L16 12Z" /></svg>
+            </div>
+            <span class="sidebar-text opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 pointer-events-none">Pinned notes</span>
+        </div>
+        <div class="flex items-center gap-4 cursor-pointer group" onclick="openCategory('To-do list', this.querySelector('.icon-svg').outerHTML)">
+            <div class="w-14 h-14 rounded-full glass-btn flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
+                <svg viewBox="0 0 24 24" class="icon-svg w-8 h-8 text-black fill-current transition-transform duration-300" style="transform: rotate(135deg);"><path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" /></svg>
+            </div>
+            <span class="sidebar-text opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 pointer-events-none">To-do list</span>
+        </div>
+        <div class="flex items-center gap-4 cursor-pointer group" onclick="openCategory('Ideas', this.querySelector('.icon-svg').outerHTML)">
+            <div class="w-14 h-14 rounded-full glass-btn flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 shadow-lg">
+                <svg viewBox="0 0 24 24" class="icon-svg w-8 h-8 text-black fill-current transition-transform duration-300"><path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z" /></svg>
+            </div>
+            <span class="sidebar-text opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 pointer-events-none">Ideas</span>
+        </div>
+        <div class="flex items-center gap-4 cursor-pointer group" onclick="openCategory('Archive', this.querySelector('.icon-svg').outerHTML)">
+            <div class="w-14 h-14 rounded-full glass-btn flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-180 shadow-lg">
+                <svg viewBox="0 0 24 24" class="icon-svg w-8 h-8 text-black fill-current transition-transform duration-300"><path d="M6.99 11L3 15L6.99 19V16H14V14H6.99V11ZM21 9L17.01 5V8H10V10H17.01V13L21 9Z" /></svg>
+            </div>
+            <span class="sidebar-text opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 pointer-events-none">Archive</span>
+        </div>
+    </div>
+
+    <!-- UI Overlay: Add Note Button -->
+    <div id="add-note-btn" class="fixed bottom-12 right-12 z-[100] flex flex-col items-center gap-2 cursor-pointer group transition-opacity duration-500" onclick="openAddNote()">
+        <span class="sidebar-text opacity-0 translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 pointer-events-none" style="font-size: 1.5rem;">Add note</span>
+        <div class="w-16 h-16 rounded-full glass-btn flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-90 shadow-lg">
+            <svg viewBox="0 0 24 24" class="w-10 h-10 text-black fill-current transition-transform duration-300"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
+        </div>
+    </div>
+
+    <!-- Category View Overlay -->
+    <div id="category-overlay" class="fixed inset-0 z-50 flex flex-col hide-ui overflow-y-auto overflow-x-hidden p-4 sm:p-8" onclick="handleOverlayClick(event)">
+        
+        <div class="m-auto w-full flex flex-col items-center py-12 shrink-0">
+            <!-- Category Header -->
+            <div id="category-header" class="flex flex-col items-center gap-4 cursor-pointer hover:scale-105 transition-transform shrink-0" onclick="closeCategory()">
+                <div id="category-icon-wrapper" class="w-24 h-24 rounded-[2rem] glass-btn flex items-center justify-center shadow-xl">
+                    <!-- Icon injected by JS -->
+                </div>
+                <span id="category-title" class="sidebar-text" style="font-size: 3rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.3);">Ideas</span>
+            </div>
+
+            <!-- Carousel Container -->
+            <div class="relative w-full max-w-7xl flex items-center justify-between px-2 sm:px-4 mt-12 shrink-0">
+                <button class="w-16 h-16 rounded-full glass-btn flex items-center justify-center hover:scale-110 shrink-0 sidebar-text z-20 shadow-xl" style="font-size: 2.5rem;" onclick="scrollCarousel(-1)">
+                    &#60;
+                </button>
+                <div id="category-cards" class="flex-1 flex items-center gap-10 overflow-x-auto py-12 px-8 snap-x snap-mandatory hide-scrollbar scroll-smooth min-w-0 mx-4">
+                    <!-- Dynamic cards will be injected here by JS -->
+                </div>
+                <button class="w-16 h-16 rounded-full glass-btn flex items-center justify-center hover:scale-110 shrink-0 sidebar-text z-20 shadow-xl" style="font-size: 2.5rem;" onclick="scrollCarousel(1)">
+                    &#62;
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Note View Overlay -->
+    <div id="add-note-overlay" class="fixed inset-0 z-[120] flex items-center justify-center hide-ui transition-opacity duration-500" onclick="handleAddNoteOverlayClick(event)">
+        <div class="relative w-full max-w-6xl h-[80vh] flex gap-12 p-8" id="add-note-container">
+            <!-- Left Side: Title and Message -->
+            <div class="flex-1 flex flex-col gap-6">
+                <!-- Title Bar & Date -->
+                <div class="flex items-center gap-6">
+                    <input type="text" id="note-title" placeholder="Enter Title" class="glass-input flex-1 text-2xl px-8 py-4 rounded-[2rem] outline-none text-white placeholder-white/70 font-sans shadow-lg">
+                    <div id="note-datetime" class="sidebar-text text-2xl whitespace-nowrap opacity-90 drop-shadow-md">
+                        <!-- Date/Time automatically injected via JS -->
+                    </div>
+                </div>
+                
+                <!-- Message Area -->
+                <textarea id="note-message" placeholder="Enter message" class="glass-input flex-1 w-full text-xl px-8 py-6 rounded-[2rem] outline-none text-white placeholder-white/70 font-sans resize-none shadow-lg focus:ring-2 focus:ring-purple-500"></textarea>
+            </div>
+            
+            <!-- Right Side: Pictures & Save -->
+            <div class="w-1/3 flex flex-col items-center gap-8 relative">
+                <!-- Picture Stack Preview -->
+                <div id="picture-preview-container" class="relative w-64 h-72 flex items-center justify-center mt-4">
+                    <!-- Decorative blank translucent cards -->
+                    <div class="absolute w-56 h-64 rounded-3xl glass-card transform -rotate-12 translate-x-[-30px] opacity-60"></div>
+                    <div class="absolute w-56 h-64 rounded-3xl glass-card transform rotate-6 translate-x-[30px] opacity-80"></div>
+                    <div class="absolute w-56 h-64 rounded-3xl glass-card z-10 flex items-center justify-center overflow-hidden border border-white/50">
+                        <img id="main-preview-img" class="w-full h-full object-cover hidden" src="" />
+                    </div>
+                </div>
+
+                <!-- Upload Button -->
+                <button class="flex items-center gap-3 sidebar-text text-3xl hover:scale-105 transition-transform drop-shadow-md" onclick="document.getElementById('file-upload').click()">
+                    <div class="w-12 h-12 rounded-full glass-btn flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" class="w-6 h-6 text-black fill-current"><path d="M4 4H7L9 2H15L17 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4ZM12 17C14.76 17 17 14.76 17 12C17 9.24 14.76 7 12 7C9.24 7 7 9.24 7 12C7 14.76 9.24 17 12 17ZM12 9C13.65 9 15 10.35 15 12C15 13.65 13.65 15 12 15C10.35 15 9 13.65 9 12C9 10.35 10.35 9 12 9Z" /></svg>
+                    </div>
+                    Upload Pictures
+                </button>
+                <input type="file" id="file-upload" class="hidden" accept="image/*" multiple onchange="handleFileUpload(event)">
+
+                <!-- Save Button (Moved down in the flex column) -->
+                <button class="w-full mt-auto px-8 py-4 rounded-full glass-btn flex items-center justify-center hover:scale-105 sidebar-text text-3xl shadow-lg transition-transform" onclick="saveNote()">
+                    Save Note
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle Switch -->
+    <div class="switch-container">
+        <label class="switch">
+            <!-- Checked by default to start in Night mode -->
+            <input type="checkbox" id="input" checked>
+            <div class="slider round">
+                <div class="sun-moon">
+                    <!-- Dots for moon inside the switch -->
+                    <svg id="moon-dot-1" class="moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                    <svg id="moon-dot-2" class="moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                    <svg id="moon-dot-3" class="moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                </div>
+                <div class="stars">
+                    <!-- Stars for night switch background -->
+                    <svg id="star-1" class="star-switch" viewBox="0 0 20 20"><path d="M10 0L13 7L20 10L13 13L10 20L7 13L0 10L7 7Z"/></svg>
+                    <svg id="star-2" class="star-switch" viewBox="0 0 20 20"><path d="M10 0L13 7L20 10L13 13L10 20L7 13L0 10L7 7Z"/></svg>
+                    <svg id="star-3" class="star-switch" viewBox="0 0 20 20"><path d="M10 0L13 7L20 10L13 13L10 20L7 13L0 10L7 7Z"/></svg>
+                    <svg id="star-4" class="star-switch" viewBox="0 0 20 20"><path d="M10 0L13 7L20 10L13 13L10 20L7 13L0 10L7 7Z"/></svg>
+                </div>
+            </div>
+        </label>
+    </div>
+
+    <!-- Sky Entities (Stars and Birds) -->
+    <div id="stars-container" class="absolute inset-0 z-0"></div>
+    <div id="birds-container" class="absolute inset-0 z-0"></div>
+
+    <!-- Celestial Body (Sun / Moon) -->
+    <div class="celestial-body">
+        <svg viewBox="0 0 100 100" class="w-full h-full absolute inset-0">
+            <!-- Moon -->
+            <path class="moon-shape" d="M 60 5 A 45 45 0 1 0 95 60 A 35 35 0 1 1 60 5" />
+            <!-- Sun -->
+            <circle class="sun-shape" cx="50" cy="50" r="40" />
+            <!-- Sun rays (optional detail) -->
+            <path class="sun-shape" d="M50 0 L50 5 M50 95 L50 100 M0 50 L5 50 M95 50 L100 50 M14 14 L18 18 M82 82 L86 86 M14 86 L18 82 M82 14 L86 18" stroke="#FDB813" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+    </div>
+
+    <!-- Top Clouds (Dark Gray/Blue or White) -->
+    <div class="layer cloud-top z-10 paper-shadow-top">
+        <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
+            <path d="M0,0 L1200,0 L1200,80 Q1100,150 1000,100 Q900,50 800,120 Q700,180 600,110 Q500,40 400,100 Q300,150 200,110 Q100,70 0,120 Z" />
+        </svg>
+    </div>
+    
+    <div class="layer cloud-top-2 z-10 paper-shadow-top">
+        <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
+            <path d="M0,0 L1200,0 L1200,50 Q1150,90 1050,60 Q950,20 850,80 Q750,140 650,90 Q550,50 450,110 Q350,160 250,90 Q150,30 0,80 Z" />
+        </svg>
+    </div>
+
+    <!-- Bottom Clouds / Hills -->
+    <div class="layer cloud-bottom-1 paper-shadow">
+        <svg viewBox="0 0 1200 300" preserveAspectRatio="none" style="height: 40vh;">
+            <path d="M0,300 L1200,300 L1200,150 Q1100,50 950,120 Q800,190 650,100 Q500,10 350,110 Q200,210 0,130 Z" />
+        </svg>
+    </div>
+
+    <div class="layer cloud-bottom-2 paper-shadow">
+        <svg viewBox="0 0 1200 300" preserveAspectRatio="none" style="height: 35vh;">
+            <path d="M0,300 L1200,300 L1200,100 Q1050,220 900,150 Q750,80 600,160 Q450,240 300,140 Q150,40 0,150 Z" />
+        </svg>
+    </div>
+
+    <div class="layer cloud-bottom-3 paper-shadow">
+        <svg viewBox="0 0 1200 300" preserveAspectRatio="none" style="height: 30vh;">
+            <path d="M0,300 L1200,300 L1200,180 Q1000,80 850,160 Q700,240 550,150 Q400,60 250,170 Q100,260 0,190 Z" />
+        </svg>
+    </div>
+    
+    <div class="layer cloud-bottom-4 paper-shadow">
+        <svg viewBox="0 0 1200 300" preserveAspectRatio="none" style="height: 25vh;">
+            <path d="M0,300 L1200,300 L1200,220 Q1050,150 900,210 Q750,270 600,180 Q450,90 300,200 Q150,300 0,210 Z" />
+        </svg>
+    </div>
+
+    <!-- Forest Layer -->
+    <div class="layer forest paper-shadow">
+        <svg viewBox="0 0 1200 250" preserveAspectRatio="none" style="height: 25vh;">
+            <path d="M0,250 L1200,250 L1200,200 Q900,170 600,220 Q300,270 0,200 Z" />
+        </svg>
+    </div>
+
+    <!-- Main Center Rotating Quotes -->
+    <div id="main-quotes" class="fixed inset-0 z-40 flex flex-col items-center justify-center pointer-events-none p-10 transition-opacity duration-500">
+        <div class="w-auto max-w-[800px] px-12 py-8 flex flex-col items-center justify-center text-center shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-all duration-1000 h-auto" style="border-radius: 2rem; background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: none;">
+            <p id="quote-text" class="text-4xl lg:text-5xl sidebar-text text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] leading-relaxed transition-opacity duration-1000 opacity-0 flex items-center justify-center text-center max-w-[700px]">
+            </p>
+            <p id="quote-author" class="text-2xl font-sans text-white/80 mt-4 transition-opacity duration-1000 opacity-0 tracking-wide font-medium drop-shadow-md text-center">
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Toggle Logic
+        const themeToggle = document.getElementById('input');
+        themeToggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                document.body.classList.remove('day-theme');
+            } else {
+                document.body.classList.add('day-theme');
+            }
+        });
+
+        // Initialize theme based on checkbox initial state
+        if (!themeToggle.checked) {
+            document.body.classList.add('day-theme');
+        }
+
+        // Remove preload class to enable transitions after initial render
+        window.addEventListener('load', () => {
+            document.body.classList.remove('preload');
+        });
+
+        // Generate Stars
+        const starsContainer = document.getElementById('stars-container');
+        const numStars = 40;
+        for (let i = 0; i < numStars; i++) {
+            const star = document.createElement('div');
+            const size = Math.random() * 8 + 4;
+            star.classList.add('star', 'star-glow');
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.top = `${Math.random() * 60}vh`;
+            star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+            starsContainer.appendChild(star);
+        }
+
+        // Generate Birds (for Day Theme)
+        const birdsContainer = document.getElementById('birds-container');
+        const numBirds = 8;
+        for (let i = 0; i < numBirds; i++) {
+            const bird = document.createElement('div');
+            bird.classList.add('bird');
+            bird.style.left = `${Math.random() * 80 + 10}vw`;
+            bird.style.top = `${Math.random() * 40 + 10}vh`;
+            
+            // Simple bird SVG
+            bird.innerHTML = `
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M2,16 Q6,12 12,16 Q18,12 22,16 Q18,14 12,18 Q6,14 2,16 Z" />
+                </svg>
+            `;
+            
+            // Make them drift slowly
+            bird.style.animation = `fly ${Math.random() * 10 + 10}s infinite alternate ease-in-out`;
+            bird.style.animationDelay = `-${Math.random() * 10}s`;
+            
+            birdsContainer.appendChild(bird);
+        }
+
+        // Trees functionality removed
+        // Category Navigation Logic
+
+        // State Management
+        let appNotes = [
+            { id: 1, title: "Note 1", message: "This is an empty note canvas. A beautiful idea can start here...", status: "all" },
+            { id: 2, title: "Note 2", message: "This is an empty note canvas. A beautiful idea can start here...", status: "all" },
+            { id: 3, title: "Note 3", message: "This is an empty note canvas. A beautiful idea can start here...", status: "all" }
+        ];
+
+        let currentCategory = '';
+        let currentIconHTML = '';
+
+        // Category Logic
+        const categoryOverlay = document.getElementById('category-overlay');
+        const mainSidebar = document.getElementById('main-sidebar');
+        const addNoteBtn = document.getElementById('add-note-btn');
+        const categoryCardsContainer = document.getElementById('category-cards');
+
+        function openCategory(title, iconHTML) {
+            currentCategory = title;
+            if (iconHTML) currentIconHTML = iconHTML;
+
+            // Set Header
+            document.getElementById('category-title').textContent = currentCategory;
+            document.getElementById('category-icon-wrapper').innerHTML = currentIconHTML;
+
+            renderCategoryCards();
+
+            // Show Category Overlay
+            categoryOverlay.classList.remove('hide-ui');
+            mainSidebar.classList.add('hide-ui');
+            addNoteBtn.classList.add('hide-ui');
+            
+            // Hide Quotes & Top bar when overlay is active
+            const mainQuotes = document.getElementById('main-quotes');
+            if (mainQuotes) mainQuotes.classList.add('hide-ui');
+            
+            const topBar = document.getElementById('top-bar');
+            if (topBar) topBar.classList.add('hide-ui');
+        }
+
+        function renderCategoryCards() {
+            let cardsHTML = '';
+            if (currentCategory === 'To-do list') {
+                for (let j = 0; j < 3; j++) {
+                    cardsHTML += `
+                        <div class="glass-card animate-card relative p-10 flex flex-col gap-8 w-[760px] max-w-[90vw] shrink-0 snap-center shadow-[0_10px_40px_rgba(0,0,0,0.3)] hover:scale-[1.02] transition-transform duration-300 min-h-[min-content] my-4" style="border-radius: 2.5rem; background: rgba(255, 255, 255, 0.2); animation-delay: ${j * 0.15}s; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);">
+                            <!-- Title Input -->
+                            <input type="text" placeholder="Enter topic/name/title" class="w-full bg-black/50 text-white placeholder-white/80 px-8 py-6 rounded-full outline-none font-sans text-2xl shadow-inner focus:ring-2 focus:ring-white/60 transition-all mb-2">
+                            
+                            <!-- Tasks Grid -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 w-full pb-4">
+                                ${Array.from({length: 6}).map((_, i) => `
+                                    <div class="flex items-center gap-4 w-full">
+                                        <label class="relative flex items-center justify-center cursor-pointer shrink-0">
+                                            <input type="checkbox" class="peer sr-only" onchange="toggleTask(this)">
+                                            <div class="w-12 h-12 rounded-full bg-black/50 shadow-inner peer-checked:bg-white/40 transition-all flex items-center justify-center hover:bg-black/60">
+                                                <svg class="w-6 h-6 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                            </div>
+                                        </label>
+                                        <input type="text" placeholder="Task ${i + 1}" class="task-input flex-1 bg-black/50 text-white placeholder-white/80 px-6 py-4 rounded-full outline-none font-sans text-xl shadow-inner focus:ring-2 focus:ring-white/60 transition-all min-w-0">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            } else if (currentCategory === 'Archive') {
+                const archivedNotes = appNotes.filter(n => n.status === 'archived');
+                if (archivedNotes.length === 0) {
+                    cardsHTML = `<p class="text-3xl opacity-60 font-sans">No archived notes.</p>`;
+                } else {
+                    const rotations = ['-rotate-6', 'rotate-0', 'rotate-6'];
+                    archivedNotes.forEach((note, i) => {
+                        const rot = rotations[i % 3];
+                        cardsHTML += `
+                            <div class="animate-card shrink-0 snap-center" style="animation-delay: ${(i % 3) * 0.15}s">
+                                <div class="glass-card relative p-6 flex flex-col justify-between w-[280px] h-[360px] shadow-xl transition-transform duration-300 transform ${rot} hover:scale-105 hover:z-10" style="border-radius: 2rem; background: rgba(255, 255, 255, 0.2);">
+                                    <div class="flex-1 overflow-hidden">
+                                        <h3 class="font-bold text-3xl mb-2 opacity-80 truncate text-center">${note.title}</h3>
+                                        <p class="text-xl opacity-70 text-center leading-relaxed line-clamp-6 font-sans">${note.message}</p>
+                                    </div>
+                                    <!-- Restore Button -->
+                                    <button class="w-full bg-black/50 text-white/90 py-3 rounded-[2rem] text-4xl hover:bg-black/60 transition-colors shadow-inner mt-4" onclick="restoreNote(${note.id})">
+                                        Restore
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            } else if (currentCategory === 'Ideas') {
+                for (let i = 0; i < 3; i++) {
+                    cardsHTML += `
+                        <div class="animate-card shrink-0 snap-center" style="animation-delay: ${i * 0.15}s">
+                            <div class="glass-card relative p-5 flex flex-col gap-4 w-[320px] h-[440px] shadow-xl transition-transform duration-300 hover:scale-105" style="border-radius: 2.5rem; background: rgba(255, 255, 255, 0.25);">
+                                <input type="text" placeholder="Topic" class="w-full h-20 bg-white/30 text-white placeholder-white/80 px-6 rounded-3xl outline-none text-4xl shadow-inner focus:ring-2 focus:ring-white/60 transition-all text-center">
+                                <textarea placeholder="enter ideas" class="w-full flex-1 bg-white/30 text-white placeholder-white/80 px-6 py-6 rounded-3xl outline-none text-3xl shadow-inner focus:ring-2 focus:ring-white/60 transition-all resize-none text-center"></textarea>
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                // All notes or Pinned notes
+                const targetStatus = currentCategory === 'Pinned notes' ? 'pinned' : 'all';
+                const filteredNotes = appNotes.filter(n => n.status === targetStatus);
+                
+                if (filteredNotes.length === 0) {
+                    cardsHTML = `<p class="text-3xl opacity-60 font-sans">No notes here yet.</p>`;
+                } else {
+                    filteredNotes.forEach((note, i) => {
+                        cardsHTML += `
+                            <div class="glass-card flex flex-col animate-card hover:scale-105 shrink-0 snap-center w-[300px] h-[400px] p-6 shadow-xl" style="border-radius: 2rem; background: rgba(255, 255, 255, 0.2); animation-delay: ${(i % 3) * 0.15}s">
+                                <div class="flex-1 overflow-hidden">
+                                    <h3 class="font-bold text-4xl mb-4 opacity-90 truncate text-center drop-shadow-md">${note.title}</h3>
+                                    <p class="font-sans text-xl opacity-80 text-center leading-relaxed line-clamp-[8]">${note.message}</p>
+                                </div>
+                                <div class="flex gap-4 mt-6">
+                                    ${targetStatus === 'all' ? `
+                                        <button class="flex-1 bg-white/20 hover:bg-white/30 text-white py-2 rounded-full font-sans text-xl transition-colors shadow-inner" onclick="pinNote(${note.id})">Pin</button>
+                                    ` : `
+                                        <button class="flex-1 bg-white/20 hover:bg-white/30 text-white py-2 rounded-full font-sans text-xl transition-colors shadow-inner" onclick="unpinNote(${note.id})">Unpin</button>
+                                    `}
+                                    <button class="flex-1 bg-red-500/40 hover:bg-red-500/60 text-white py-2 rounded-full font-sans text-xl transition-colors shadow-inner" onclick="archiveNote(${note.id})">Delete</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            }
+            categoryCardsContainer.innerHTML = cardsHTML;
+        }
+
+        function closeCategory() {
+            // Hide Category Overlay
+            categoryOverlay.classList.add('hide-ui');
+            
+            // Show main UI
+            mainSidebar.classList.remove('hide-ui');
+            addNoteBtn.classList.remove('hide-ui');
+            
+            // Show Quotes & Top bar when overlay closes
+            const mainQuotes = document.getElementById('main-quotes');
+            if (mainQuotes) mainQuotes.classList.remove('hide-ui');
+            
+            const topBar = document.getElementById('top-bar');
+            if (topBar) topBar.classList.remove('hide-ui');
+        }
+
+        function scrollCarousel(direction) {
+            const container = document.getElementById('category-cards');
+            const cardWidth = container.firstElementChild ? container.firstElementChild.offsetWidth : 300;
+            const gap = 32; // gap-8 is 2rem (32px)
+            container.scrollBy({
+                left: direction * (cardWidth + gap),
+                behavior: 'smooth'
+            });
+        }
+
+        function handleOverlayClick(e) {
+            // If the click is not on a card, button, or the header, close the overlay
+            if (!e.target.closest('.glass-card') && !e.target.closest('button') && !e.target.closest('#category-header')) {
+                closeCategory();
+            }
+        }
+
+        function toggleTask(checkbox) {
+            const input = checkbox.closest('.flex').querySelector('.task-input');
+            if (checkbox.checked) {
+                input.classList.add('line-through', 'opacity-50');
+            } else {
+                input.classList.remove('line-through', 'opacity-50');
+            }
+        }
+
+        function pinNote(id) {
+            const note = appNotes.find(n => n.id === id);
+            if (note) note.status = 'pinned';
+            renderCategoryCards();
+        }
+
+        function unpinNote(id) {
+            const note = appNotes.find(n => n.id === id);
+            if (note) note.status = 'all';
+            renderCategoryCards();
+        }
+
+        function archiveNote(id) {
+            const note = appNotes.find(n => n.id === id);
+            if (note) note.status = 'archived';
+            renderCategoryCards();
+        }
+
+        function restoreNote(id) {
+            const note = appNotes.find(n => n.id === id);
+            if (note) note.status = 'all';
+            renderCategoryCards();
+        }
+
+        // Add Note Logic
+        const addNoteOverlay = document.getElementById('add-note-overlay');
+        const noteDatetime = document.getElementById('note-datetime');
+
+        function updateDateTime() {
+            if (!noteDatetime) return;
+            const now = new Date();
+            const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            noteDatetime.textContent = now.toLocaleDateString('en-US', options);
+        }
+        
+        // Quotes Logic
+        const quotes = [
+            { text: "If you want to shine like a sun, first burn like a sun.", author: "Dr. A.P.J. Abdul Kalam" },
+            { text: "Be the change that you wish to see in the world.", author: "Mahatma Gandhi" },
+            { text: "You can't cross the sea merely by standing and staring at the water.", author: "Rabindranath Tagore" },
+            { text: "Arise, awake and stop not till the goal is reached.", author: "Swami Vivekananda" },
+            { text: "I don't believe in taking right decisions. I take decisions and then make them right.", author: "Ratan Tata" }
+        ];
+
+        let currentQuoteIndex = 0;
+
+        function updateQuote() {
+            const quoteTextEl = document.getElementById('quote-text');
+            const quoteAuthorEl = document.getElementById('quote-author');
+
+            // Fade out
+            quoteTextEl.style.opacity = '0';
+            quoteAuthorEl.style.opacity = '0';
+
+            setTimeout(() => {
+                // Change text
+                quoteTextEl.textContent = `"${quotes[currentQuoteIndex].text}"`;
+                quoteAuthorEl.textContent = `- ${quotes[currentQuoteIndex].author}`;
+                
+                // Fade in
+                quoteTextEl.style.opacity = '1';
+                quoteAuthorEl.style.opacity = '1';
+
+                currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+            }, 1000); // Wait for fade out to complete
+        }
+
+        // Initialize App
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        
+        // Start quotes immediately, then rotate every 10 seconds
+        updateQuote();
+        setInterval(updateQuote, 10000);
+        
+        // Typewriter Effect Logic
+        const topBarText = "Hey welcome to Noteverse! Good to see you here, I can't wait to hold your memories and thoughts";
+        const typewriterEl = document.getElementById('typewriter-text');
+        let typeIndex = 0;
+
+        function typeWriter() {
+            if (typewriterEl && typeIndex < topBarText.length) {
+                typewriterEl.textContent += topBarText.charAt(typeIndex);
+                typeIndex++;
+                setTimeout(typeWriter, 50); // Adjust typing speed here
+            }
+        }
+        
+        // Start typewriter after a short delay
+        setTimeout(typeWriter, 1000);
+
+        function openAddNote() {
+            addNoteOverlay.classList.remove('hide-ui');
+            updateDateTime();
+            mainSidebar.classList.add('hide-ui');
+            addNoteBtn.classList.add('hide-ui');
+            
+            // Hide Quotes & Top bar
+            const mainQuotes = document.getElementById('main-quotes');
+            if (mainQuotes) mainQuotes.classList.add('hide-ui');
+            
+            const topBar = document.getElementById('top-bar');
+            if (topBar) topBar.classList.add('hide-ui');
+        }
+
+        function closeAddNote() {
+            addNoteOverlay.classList.add('hide-ui');
+            mainSidebar.classList.remove('hide-ui');
+            addNoteBtn.classList.remove('hide-ui');
+            
+            // Show Quotes & Top bar
+            const mainQuotes = document.getElementById('main-quotes');
+            if (mainQuotes) mainQuotes.classList.remove('hide-ui');
+            
+            const topBar = document.getElementById('top-bar');
+            if (topBar) topBar.classList.remove('hide-ui');
+        }
+
+        function handleAddNoteOverlayClick(e) {
+            // Close if clicking outside the container (on the overlay background)
+            if (e.target === addNoteOverlay) {
+                closeAddNote();
+            }
+        }
+
+        function handleFileUpload(event) {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                const file = files[0]; // show preview of the first selected image
+                const url = URL.createObjectURL(file);
+                const previewImg = document.getElementById('main-preview-img');
+                previewImg.src = url;
+                previewImg.classList.remove('hidden');
+            }
+        }
+
+        function saveNote() {
+            const title = document.getElementById('note-title').value.trim() || 'Untitled Note';
+            const msg = document.getElementById('note-message').value.trim() || 'No content...';
+            
+            // Add to state array
+            appNotes.unshift({
+                id: Date.now(),
+                title: title,
+                message: msg,
+                status: 'all'
+            });
+            
+            // Clear fields for next time
+            document.getElementById('note-title').value = '';
+            document.getElementById('note-message').value = '';
+            const previewImg = document.getElementById('main-preview-img');
+            previewImg.src = '';
+            previewImg.classList.add('hidden');
+            document.getElementById('file-upload').value = '';
+            
+            closeAddNote();
+            
+            // Automatically open 'All notes' to show the new note
+            openCategory('All notes', '<svg viewBox="0 0 24 24" class="icon-svg w-8 h-8 text-black fill-current transition-transform duration-300"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" /></svg>');
+        }
+    </script>
+    <script src="splashCursor.js"></script>
+</body>
+</html>
