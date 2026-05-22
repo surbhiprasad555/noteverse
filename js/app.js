@@ -63,8 +63,8 @@ for (let i = 0; i < 8; i++) {
 const STORAGE_KEY = 'nv_notes';
 
 const DEFAULT_NOTES = [
-    { id: 1, title: 'Welcome to Noteverse', message: 'This is your first note. Tap the + button to create your own memories and thoughts here!', status: 'all', color: 'purple', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-    { id: 2, title: 'How to use',           message: 'Pin notes you love, archive ones you are done with, and search anything instantly. Your notes are saved automatically!', status: 'all', color: 'blue', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+    { id: 1, title: 'Welcome to Noteverse', message: 'This is your first note. Tap the + button to create your own memories and thoughts here!', status: 'all', color: 'purple', createdAt: '2025-01-01T00:00:00.000Z', updatedAt: '2025-01-01T00:00:00.000Z' },
+    { id: 2, title: 'How to use',           message: 'Pin notes you love, archive ones you are done with, and search anything instantly. Your notes are saved automatically!', status: 'all', color: 'blue', createdAt: '2025-01-01T00:00:00.000Z', updatedAt: '2025-01-01T00:00:00.000Z' },
 ];
 
 function loadNotes() {
@@ -77,7 +77,15 @@ function loadNotes() {
 }
 
 function saveNotes() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(appNotes));
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appNotes));
+    } catch (e) {
+        if (e.name === 'QuotaExceededError' || e.code === 22) {
+            showToast('Storage full! Try removing large images from notes.');
+        } else {
+            showToast('Could not save notes — please try again.');
+        }
+    }
 }
 
 /* ── State ────────────────────────────────────────────────── */
@@ -110,6 +118,7 @@ const saveBtnEl              = document.getElementById('save-note-btn');
 const overlayTitleEl         = document.getElementById('overlay-title');
 const wordCountEl            = document.getElementById('word-count');
 const colorPickerEl          = document.getElementById('note-color-picker');
+const backBtnEl              = document.getElementById('back-btn');
 
 /* ── Toast Notification ───────────────────────────────────── */
 function showToast(msg, duration = 2200) {
@@ -124,7 +133,7 @@ function showToast(msg, duration = 2200) {
     }, duration);
 }
 
-/* ── Helpers: show/hide home UI ───────────────────────────── */
+/* ── Helpers: show/hide home UI ─────────────────────────── */
 function hideHomeUI() {
     mainQuotesEl?.classList.add('hide-ui');
     topBarEl?.classList.add('hide-ui');
@@ -133,6 +142,8 @@ function showHomeUI() {
     mainQuotesEl?.classList.remove('hide-ui');
     topBarEl?.classList.remove('hide-ui');
 }
+function showBackBtn() { document.getElementById('back-btn')?.classList.remove('hide-ui'); }
+function hideBackBtn() { document.getElementById('back-btn')?.classList.add('hide-ui'); }
 
 /* ── Format timestamp for display ────────────────────────── */
 function fmtDate(iso) {
@@ -165,6 +176,7 @@ function openCategory(title, iconHTML) {
     mainSidebar.classList.add('hide-ui');
     addNoteBtn.classList.add('hide-ui');
     hideHomeUI();
+    showBackBtn();
 }
 
 function closeCategory() {
@@ -172,6 +184,7 @@ function closeCategory() {
     mainSidebar.classList.remove('hide-ui');
     addNoteBtn.classList.remove('hide-ui');
     showHomeUI();
+    hideBackBtn();
     searchQuery = '';
 }
 
@@ -193,7 +206,14 @@ function scrollCarousel(direction) {
     container.scrollBy({ left: direction * (cardWidth + gap), behavior: 'smooth' });
 }
 
-/* ── Search ───────────────────────────────────────────────── */
+/* ── Back button handler ────────────────────────────────── */
+function handleBackBtn() {
+    // Close whichever overlay is currently open
+    if (!addNoteOverlay.classList.contains('hide-ui')) { closeAddNote(); return; }
+    if (!categoryOverlay.classList.contains('hide-ui')) { closeCategory(); return; }
+}
+
+/* ── Search ─────────────────────────────────────────────── */
 function handleSearch(e) {
     searchQuery = e.target.value.toLowerCase();
     renderCategoryCards();
@@ -302,26 +322,41 @@ function renderCategoryCards() {
             filteredNotes.forEach((note, i) => {
                 const bg     = NOTE_COLORS[note.color] || NOTE_COLORS.default;
                 const pinBtn = targetStatus === 'all'
-                    ? `<button class="flex-1 bg-white/20 hover:bg-white/30 text-white py-2 rounded-full font-sans text-xl transition-colors shadow-inner" onclick="pinNote(${note.id})">📌 Pin</button>`
-                    : `<button class="flex-1 bg-white/20 hover:bg-white/30 text-white py-2 rounded-full font-sans text-xl transition-colors shadow-inner" onclick="unpinNote(${note.id})">Unpin</button>`;
+                    ? `<button class="note-action-btn" onclick="pinNote(${note.id})" title="Pin note">
+                           <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 12V4H17V2H7V4H8V12L6 14V16H11V22H13V16H18V14L16 12Z"/></svg>
+                           Pin
+                       </button>`
+                    : `<button class="note-action-btn" onclick="unpinNote(${note.id})" title="Unpin note">
+                           <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 12V4H17V2H7V4H8V12L6 14V16H11V22H13V16H18V14L16 12Z"/></svg>
+                           Unpin
+                       </button>`;
+
+                const imgHTML = note.image
+                    ? `<div class="w-full h-24 rounded-2xl overflow-hidden mb-2 shrink-0"><img src="${note.image}" class="w-full h-full object-cover" alt="Note image"></div>`
+                    : '';
 
                 cardsHTML += `
-                    <div class="glass-card flex flex-col animate-card hover:scale-105 shrink-0 snap-center w-[300px] h-[420px] p-6 shadow-xl relative"
+                    <div class="glass-card flex flex-col animate-card hover:scale-105 shrink-0 snap-center w-[300px] h-[420px] p-5 shadow-xl relative"
                          style="border-radius:2rem;background:${bg};animation-delay:${(i%3)*0.15}s">
                         <button class="copy-btn" onclick="copyNote(${note.id})" title="Copy note" aria-label="Copy note">
                             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
                         </button>
-                        <div class="flex-1 overflow-hidden">
-                            <h3 class="font-bold text-4xl mb-3 opacity-90 truncate text-center drop-shadow-md pr-6">${note.title}</h3>
-                            <p class="font-sans text-xl opacity-80 text-center leading-relaxed line-clamp-[7]">${note.message}</p>
+                        <div class="flex-1 overflow-hidden flex flex-col">
+                            ${imgHTML}
+                            <h3 class="font-bold text-3xl mb-2 opacity-90 truncate text-center drop-shadow-md pr-6">${note.title}</h3>
+                            <p class="font-sans text-lg opacity-80 text-center leading-relaxed line-clamp-[6] flex-1">${note.message}</p>
                         </div>
-                        <p class="text-center font-sans text-sm opacity-50 mt-2">${fmtDate(note.updatedAt || note.createdAt)}</p>
-                        <div class="flex gap-3 mt-4">
-                            <button class="flex-1 bg-white/20 hover:bg-white/30 text-white py-2 rounded-full font-sans text-xl transition-colors shadow-inner"
-                                    onclick="editNote(${note.id})">✏️ Edit</button>
+                        <p class="text-center font-sans text-xs opacity-40 mt-1 mb-2">${fmtDate(note.updatedAt || note.createdAt)}</p>
+                        <div class="flex gap-2 mt-2">
+                            <button class="note-action-btn" onclick="editNote(${note.id})" title="Edit note">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                                Edit
+                            </button>
                             ${pinBtn}
-                            <button class="flex-1 bg-red-500/40 hover:bg-red-500/60 text-white py-2 rounded-full font-sans text-xl transition-colors shadow-inner"
-                                    onclick="archiveNote(${note.id})">🗑</button>
+                            <button class="note-action-btn note-action-btn--danger" onclick="archiveNote(${note.id})" title="Delete note">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                Delete
+                            </button>
                         </div>
                     </div>`;
             });
@@ -393,6 +428,20 @@ function openAddNote(noteId = null) {
     mainSidebar.classList.add('hide-ui');
     addNoteBtn.classList.add('hide-ui');
     hideHomeUI();
+    showBackBtn();
+
+    // Set pending image from existing note if editing
+    window._pendingImage = (noteId !== null && appNotes.find(n => n.id === noteId)?.image) || null;
+    const previewImg = document.getElementById('main-preview-img');
+    if (previewImg) {
+        if (window._pendingImage) {
+            previewImg.src = window._pendingImage;
+            previewImg.classList.remove('hidden');
+        } else {
+            previewImg.src = '';
+            previewImg.classList.add('hidden');
+        }
+    }
 
     // Focus title field
     setTimeout(() => document.getElementById('note-title')?.focus(), 100);
@@ -404,6 +453,7 @@ function closeAddNote() {
     addNoteBtn.classList.remove('hide-ui');
     editingNoteId = null;
     showHomeUI();
+    hideBackBtn();
 }
 
 function handleAddNoteOverlayClick(e) {
@@ -412,12 +462,22 @@ function handleAddNoteOverlayClick(e) {
 
 function handleFileUpload(event) {
     const files = event.target.files;
-    if (files && files.length > 0) {
-        const url        = URL.createObjectURL(files[0]);
+    if (!files || files.length === 0) return;
+
+    const file   = files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        const base64 = e.target.result; // data:image/...;base64,...
         const previewImg = document.getElementById('main-preview-img');
-        previewImg.src   = url;
+        previewImg.src   = base64;
         previewImg.classList.remove('hidden');
-    }
+        // Store in a temporary variable so saveNote() can grab it
+        window._pendingImage = base64;
+    };
+
+    reader.onerror = () => showToast('Could not load image');
+    reader.readAsDataURL(file);
 }
 
 function updateWordCount() {
@@ -446,6 +506,12 @@ function saveNote() {
             note.message   = msg;
             note.color     = color;
             note.updatedAt = new Date().toISOString();
+            // Only update image if one was explicitly selected (not null reset)
+            if (window._pendingImage !== undefined && window._pendingImage !== null) {
+                note.image = window._pendingImage;
+            } else if (window._pendingImage === null && !appNotes.find(n => n.id === editingNoteId)?.image) {
+                note.image = null;
+            }
             saveNotes();
             showToast('Note updated!');
         }
@@ -457,6 +523,7 @@ function saveNote() {
             message:   msg,
             status:    'all',
             color,
+            image:     window._pendingImage || null,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         });
@@ -468,6 +535,7 @@ function saveNote() {
     document.getElementById('note-title').value   = '';
     document.getElementById('note-message').value = '';
     document.getElementById('file-upload').value  = '';
+    window._pendingImage = null;
     const previewImg = document.getElementById('main-preview-img');
     if (previewImg) { previewImg.src = ''; previewImg.classList.add('hidden'); }
     if (wordCountEl) wordCountEl.textContent = '0 words';

@@ -393,6 +393,62 @@ body.day-theme .bird { opacity: 0.7; }
     transform: scale(1.1);
 }
 
+/* ── Note Card Action Buttons ───────────────────────────── */
+.note-action-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: white;
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    padding: 0.45rem 0.5rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+    min-width: 0;
+}
+.note-action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.04);
+}
+.note-action-btn--danger {
+    background: rgba(239, 68, 68, 0.35);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+.note-action-btn--danger:hover {
+    background: rgba(239, 68, 68, 0.55);
+}
+
+/* ── Back Button (top-left of category overlay) ─────────── */
+#back-btn {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 3rem;
+    padding: 0.55rem 1.2rem 0.55rem 0.9rem;
+    color: white;
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+#back-btn:hover { background: rgba(255,255,255,0.28); transform: translateX(-3px); }
+#back-btn svg   { flex-shrink: 0; }
+
 /* ── Edit Mode overlay tint ──────────────────────────────── */
 .editing-badge {
     background: rgba(139,92,246,0.7);

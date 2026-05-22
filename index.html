@@ -156,7 +156,7 @@
                         </div>
                         Upload Picture
                     </button>
-                    <input type="file" id="file-upload" class="hidden" accept="image/*" multiple onchange="handleFileUpload(event)">
+                    <input type="file" id="file-upload" class="hidden" accept="image/*" onchange="handleFileUpload(event)">
 
                     <button id="save-note-btn" class="w-full mt-auto px-8 py-4 rounded-full glass-btn flex items-center justify-center hover:scale-105 sidebar-text text-3xl shadow-lg transition-transform"
                             onclick="saveNote()">
@@ -170,6 +170,14 @@
 
     <!-- ── Toast Container ─────────────────────────────────────────── -->
     <div id="toast-container" aria-live="polite"></div>
+
+    <!-- ── Global Back Button (shown when any overlay is open) ── -->
+    <button id="back-btn" class="hide-ui" onclick="handleBackBtn()" aria-label="Go back">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back
+    </button>
 
     <!-- ── Theme Toggle ─────────────────────────────────────────── -->
     <div class="switch-container" aria-label="Toggle day/night theme">
